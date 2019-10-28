@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <title>WebSocket Demo</title>
+    <style>
+    </style>
+    <script type="text/javascript" src="monitor.js"></script>
+</head>
+<body>
+    <div id="txtOutput"></div>
+</body>
+<script>
+    var ws, cmd = "";
+    var output=document.getElementById("txtOutput");
+    function connect(){
+        if ("WebSocket" in window) {
+            ws = new WebSocket("ws://localhost:5000/");
+            output.value="connecting...";
+            ws.onopen=function(e){output.innerHTML="connected"};
+            ws.onclose=function(e){output.innerHTML="disconnected"};
+            ws.onerror=function(e){output.value=e.data};
+            ws.onmessage=function(e){
+                output.innerHTML = generateTableHTML(JSON.parse(e.data));
+            }
+        } else alert("WebSockets not supported on your browser.");
+    }
+    connect(); //call the connect function
+</script>
+</html>
